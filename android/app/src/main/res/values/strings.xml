@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">StreamTube</string>
+    <string name="title_activity_main">StreamTube</string>
+    <string name="package_name">com.streamtube.app</string>
+    <string name="custom_url_scheme">com.streamtube.app</string>
+</resources>
