@@ -37,7 +37,7 @@ export default async function WatchPage({ params }: { params: Promise<{ id: stri
   if (loadError) {
     return (
       <div className="px-4">
-        <YouTubeError message="YouTube could not load this video. Check the API key, API access, and quota, then try again." />
+        <YouTubeError message="This video could not load. Check the service configuration and try again." />
       </div>
     )
   }

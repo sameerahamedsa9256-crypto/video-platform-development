@@ -15,7 +15,7 @@ export default async function SubscriptionsPage() {
   } catch (error) {
     errorMessage = error instanceof YouTubeApiError
       ? error.message
-      : 'YouTube could not load videos right now. Please try again later.'
+      : 'Videos could not load right now. Please try again later.'
   }
 
   return (

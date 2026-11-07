@@ -15,7 +15,7 @@ export default async function ShortsPage() {
   } catch (error) {
     errorMessage = error instanceof YouTubeApiError
       ? error.message
-      : 'YouTube could not load Shorts right now. Please try again later.'
+      : 'Short videos could not load right now. Please try again later.'
   }
 
   if (errorMessage) {

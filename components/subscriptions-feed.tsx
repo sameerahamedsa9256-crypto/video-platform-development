@@ -23,7 +23,7 @@ export function SubscriptionsFeed({ videos }: { videos: Video[] }) {
             <li key={channel.id} className="flex w-36 shrink-0 flex-col items-center gap-2 rounded-xl bg-secondary p-4 text-center">
               <ChannelAvatar channel={channel} className="size-14 text-lg" />
               <p className="w-full truncate text-sm font-semibold">{channel.name}</p>
-              <p className="text-xs text-muted-foreground">{channel.subscribers ? `${formatCount(channel.subscribers)} subscribers` : 'YouTube channel'}</p>
+              <p className="text-xs text-muted-foreground">{channel.subscribers ? `${formatCount(channel.subscribers)} subscribers` : 'Creator'}</p>
               <SubscribeButton channel={channel} className="h-8 px-3 text-xs" />
             </li>
           ))}

@@ -58,7 +58,7 @@ type VideoListResponse = {
 async function youtubeRequest<T>(resource: 'search' | 'videos', params: URLSearchParams): Promise<T> {
   const apiKey = process.env.YOUTUBE_API_KEY
   if (!apiKey) {
-    throw new YouTubeApiError('The YouTube API key is not configured for this project.')
+    throw new YouTubeApiError('Video feed configuration is unavailable. Please try again later.')
   }
 
   const url = new URL(`${API_BASE}/${resource}`)
@@ -71,17 +71,17 @@ async function youtubeRequest<T>(resource: 'search' | 'videos', params: URLSearc
       next: { revalidate: CACHE_SECONDS },
     })
   } catch {
-    throw new YouTubeApiError('YouTube could not be reached. Check the connection and try again.')
+    throw new YouTubeApiError('The video service could not be reached. Check the connection and try again.')
   }
 
   if (!response.ok) {
     if (response.status === 403) {
-      throw new YouTubeApiError('YouTube denied this request. Check the API key, YouTube Data API v3 access, and quota in Google Cloud.')
+      throw new YouTubeApiError('The video service denied this request. Check its access and quota, then try again.')
     }
     if (response.status === 404) {
-      throw new YouTubeApiError('This YouTube video could not be found.')
+      throw new YouTubeApiError('This video could not be found.')
     }
-    throw new YouTubeApiError('YouTube could not load videos right now. Please try again later.')
+    throw new YouTubeApiError('Videos could not load right now. Please try again later.')
   }
 
   return response.json() as Promise<T>
@@ -107,7 +107,7 @@ function formatDuration(isoDuration = '') {
 
 function relativeDate(dateString: string) {
   const timestamp = Date.parse(dateString)
-  if (!Number.isFinite(timestamp)) return 'on YouTube'
+  if (!Number.isFinite(timestamp)) return 'recently'
 
   const days = Math.max(0, Math.floor((Date.now() - timestamp) / 86_400_000))
   if (days === 0) return 'today'

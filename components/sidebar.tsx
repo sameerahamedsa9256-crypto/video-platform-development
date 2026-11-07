@@ -120,10 +120,6 @@ function FullNav({ onNavigate }: { onNavigate?: () => void }) {
         />
       ))}
 
-      <hr className="my-3 border-border" />
-      <p className="px-3 pb-4 text-xs leading-relaxed text-muted-foreground">
-        {'StreamTube demo · Built with Next.js'}
-      </p>
     </nav>
   )
 }

@@ -22,7 +22,7 @@ export default async function HomePage({
   } catch (error) {
     errorMessage = error instanceof YouTubeApiError
       ? error.message
-      : 'YouTube could not load videos right now. Please try again later.'
+      : 'Videos could not load right now. Please try again later.'
   }
 
   const isLandingPage = !q?.trim() && !category
