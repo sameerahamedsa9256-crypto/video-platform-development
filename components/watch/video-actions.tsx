@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { Check, Download, Share2 } from 'lucide-react'
+import { ArrowUpRight, Check, Share2 } from 'lucide-react'
 import { formatCount, type Channel, type Video } from '@/lib/data'
 import { ChannelAvatar } from '@/components/channel-avatar'
 import { LikeButtons } from '@/components/like-buttons'
@@ -26,7 +26,7 @@ export function VideoActions({ video, channel }: { video: Video; channel: Channe
         <ChannelAvatar channel={channel} className="size-10" />
         <div className="min-w-0">
           <p className="truncate font-semibold">{channel.name}</p>
-          <p className="text-xs text-muted-foreground">{formatCount(channel.subscribers)} subscribers</p>
+          <p className="text-xs text-muted-foreground">{channel.subscribers ? `${formatCount(channel.subscribers)} subscribers` : 'YouTube channel'}</p>
         </div>
         <SubscribeButton channel={channel} className="ml-2" />
       </div>
@@ -41,12 +41,13 @@ export function VideoActions({ video, channel }: { video: Video; channel: Channe
           <span aria-live="polite">{copied ? 'Copied' : 'Share'}</span>
         </button>
         <a
-          href={video.src}
-          download
+          href={`https://www.youtube.com/watch?v=${encodeURIComponent(video.youtubeId)}`}
+          target="_blank"
+          rel="noreferrer"
           className="inline-flex h-9 shrink-0 items-center gap-2 rounded-full bg-secondary px-4 text-sm font-medium hover:bg-accent"
         >
-          <Download className="size-5" aria-hidden="true" />
-          Download
+          <ArrowUpRight className="size-5" aria-hidden="true" />
+          Watch on YouTube
         </a>
       </div>
     </div>

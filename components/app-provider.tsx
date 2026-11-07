@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
-import type { Comment } from '@/lib/data'
+import type { Channel, Comment } from '@/lib/data'
 
 type Reaction = 'like' | 'dislike' | null
 
@@ -10,9 +10,9 @@ type AppState = {
   toggleSidebarExpanded: () => void
   drawerOpen: boolean
   setDrawerOpen: (open: boolean) => void
-  subscriptions: string[]
+  subscriptions: Channel[]
   isSubscribed: (channelId: string) => boolean
-  toggleSubscription: (channelId: string) => void
+  toggleSubscription: (channel: Channel) => void
   reactionFor: (id: string) => Reaction
   setReaction: (id: string, reaction: Reaction) => void
   userComments: (videoId: string) => Comment[]
@@ -24,13 +24,15 @@ const AppContext = createContext<AppState | null>(null)
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [sidebarExpanded, setSidebarExpanded] = useState(true)
   const [drawerOpen, setDrawerOpen] = useState(false)
-  const [subscriptions, setSubscriptions] = useState<string[]>(['cosmos', 'umami', 'devloop'])
+  const [subscriptions, setSubscriptions] = useState<Channel[]>([])
   const [reactions, setReactions] = useState<Record<string, Reaction>>({})
   const [comments, setComments] = useState<Record<string, Comment[]>>({})
 
-  const toggleSubscription = useCallback((channelId: string) => {
+  const toggleSubscription = useCallback((channel: Channel) => {
     setSubscriptions((prev) =>
-      prev.includes(channelId) ? prev.filter((id) => id !== channelId) : [...prev, channelId],
+      prev.some((item) => item.id === channel.id)
+        ? prev.filter((item) => item.id !== channel.id)
+        : [...prev, channel],
     )
   }, [])
 
@@ -52,7 +54,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
       drawerOpen,
       setDrawerOpen,
       subscriptions,
-      isSubscribed: (id) => subscriptions.includes(id),
+      isSubscribed: (id) => subscriptions.some((channel) => channel.id === id),
       toggleSubscription,
       reactionFor: (id) => reactions[id] ?? null,
       setReaction: (id, reaction) => setReactions((prev) => ({ ...prev, [id]: reaction })),

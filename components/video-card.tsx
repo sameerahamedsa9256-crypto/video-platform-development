@@ -1,11 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { formatCount, getChannel, type Video } from '@/lib/data'
+import { formatCount, getVideoChannel, type Video } from '@/lib/data'
 import { ChannelAvatar } from '@/components/channel-avatar'
 import { cn } from '@/lib/utils'
 
 export function VideoCard({ video, compact = false }: { video: Video; compact?: boolean }) {
-  const channel = getChannel(video.channelId)
+  const channel = getVideoChannel(video)
   return (
     <article className={cn('group relative', compact ? 'flex gap-2' : 'flex flex-col gap-3')}>
       <div

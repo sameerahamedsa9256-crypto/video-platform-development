@@ -11,7 +11,7 @@ export function SubscribeButton({ channel, className }: { channel: Channel; clas
   return (
     <button
       type="button"
-      onClick={() => toggleSubscription(channel.id)}
+      onClick={() => toggleSubscription(channel)}
       aria-pressed={subscribed}
       aria-label={subscribed ? `Unsubscribe from ${channel.name}` : `Subscribe to ${channel.name}`}
       className={cn(
