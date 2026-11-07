@@ -120,6 +120,8 @@ function relativeDate(dateString: string) {
 
 function isPlayableInUs(video: ApiVideo) {
   if (video.status?.embeddable !== true || video.snippet.liveBroadcastContent === 'upcoming') return false
+  if (/marvel studios['’]?\s+avengers:\s*endgame/i.test(video.snippet.title)) return false
+  if (/youtube movies/i.test(video.snippet.channelTitle)) return false
   const restriction = video.contentDetails?.regionRestriction
   if (restriction?.blocked?.includes('US')) return false
   if (restriction?.allowed && !restriction.allowed.includes('US')) return false

@@ -3,6 +3,7 @@ import { SearchX } from 'lucide-react'
 import { categories, type Video } from '@/lib/data'
 import { searchYouTubeVideos, YouTubeApiError } from '@/lib/youtube'
 import { CategoryChips } from '@/components/category-chips'
+import { FeaturedVideo } from '@/components/featured-video'
 import { VideoGrid } from '@/components/video-grid'
 import { YouTubeError } from '@/components/youtube-error'
 
@@ -24,6 +25,10 @@ export default async function HomePage({
       : 'YouTube could not load videos right now. Please try again later.'
   }
 
+  const isLandingPage = !q?.trim() && !category
+  const featuredVideo = isLandingPage ? results[0] : undefined
+  const videos = featuredVideo ? results.slice(1) : results
+
   return (
     <div className="px-4 pb-8">
       <CategoryChips active={category} />
@@ -32,17 +37,18 @@ export default async function HomePage({
         <YouTubeError message={errorMessage} />
       ) : (
         <>
+          {featuredVideo && <FeaturedVideo video={featuredVideo} />}
           {q && (
             <p className="mb-4 text-sm text-muted-foreground">
               {results.length} {results.length === 1 ? 'result' : 'results'} for{' '}
               <span className="font-medium text-foreground">{`"${q}"`}</span>
             </p>
           )}
-          {results.length > 0 ? (
+          {videos.length > 0 ? (
             <div className="pt-2">
-              <VideoGrid videos={results} />
+              <VideoGrid videos={videos} />
             </div>
-          ) : (
+          ) : featuredVideo ? null : (
             <div className="flex flex-col items-center gap-3 py-24 text-center">
               <SearchX className="size-12 text-muted-foreground" aria-hidden="true" />
               <p className="text-lg font-semibold">No videos found</p>
