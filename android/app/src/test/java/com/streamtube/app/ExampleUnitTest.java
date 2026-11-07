@@ -1,4 +1,4 @@
-package com.getcapacitor.myapp;
+package com.streamtube.app;
 
 import static org.junit.Assert.*;
 
