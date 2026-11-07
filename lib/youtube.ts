@@ -37,8 +37,13 @@ type ApiVideo = {
     channelTitle: string
     categoryId?: string
     thumbnails?: Record<string, { url: string }>
+    liveBroadcastContent?: 'live' | 'upcoming' | 'none'
   }
-  contentDetails?: { duration?: string }
+  contentDetails?: {
+    duration?: string
+    regionRestriction?: { allowed?: string[]; blocked?: string[] }
+  }
+  status?: { embeddable?: boolean }
   statistics?: { viewCount?: string; likeCount?: string }
 }
 
@@ -113,6 +118,14 @@ function relativeDate(dateString: string) {
   return `${Math.floor(days / 365)} years ago`
 }
 
+function isPlayableInUs(video: ApiVideo) {
+  if (video.status?.embeddable !== true || video.snippet.liveBroadcastContent === 'upcoming') return false
+  const restriction = video.contentDetails?.regionRestriction
+  if (restriction?.blocked?.includes('US')) return false
+  if (restriction?.allowed && !restriction.allowed.includes('US')) return false
+  return true
+}
+
 function mapVideo(video: ApiVideo): Video {
   const youtubeId = video.id
   const thumbnails = video.snippet.thumbnails ?? {}
@@ -160,6 +173,7 @@ export async function searchYouTubeVideos({
     regionCode: 'US',
     safeSearch: 'moderate',
     videoEmbeddable: 'true',
+    videoSyndicated: 'true',
   })
   const query = q?.trim().slice(0, 100)
   if (query) params.set('q', query)
@@ -186,11 +200,15 @@ export async function getYouTubeVideo(id: string): Promise<Video | undefined> {
 
 async function getYouTubeVideosByIds(ids: string[]): Promise<Video[]> {
   const params = new URLSearchParams({
-    part: 'snippet,statistics,contentDetails',
+    part: 'snippet,statistics,contentDetails,status',
     id: ids.slice(0, 24).join(','),
   })
   const response = await youtubeRequest<VideoListResponse>('videos', params)
-  const byId = new Map((response.items ?? []).map((video) => [video.id, mapVideo(video)]))
+  const byId = new Map(
+    (response.items ?? [])
+      .filter(isPlayableInUs)
+      .map((video) => [video.id, mapVideo(video)]),
+  )
   return ids.flatMap((id) => {
     const video = byId.get(id)
     return video ? [video] : []
