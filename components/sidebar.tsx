@@ -19,7 +19,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { categories, getChannel } from '@/lib/data'
+import { categories } from '@/lib/data'
 import { useApp } from '@/components/app-provider'
 import { ChannelAvatar } from '@/components/channel-avatar'
 import { Logo } from '@/components/logo'
@@ -95,20 +95,17 @@ function FullNav({ onNavigate }: { onNavigate?: () => void }) {
       <hr className="my-3 border-border" />
       <h2 className="px-3 pb-1 text-base font-semibold">Subscriptions</h2>
       {subscriptions.length === 0 && <p className="px-3 py-2 text-sm text-muted-foreground">No subscriptions yet</p>}
-      {subscriptions.map((id) => {
-        const channel = getChannel(id)
-        return (
-          <Link
-            key={id}
-            href="/subscriptions"
-            onClick={onNavigate}
-            className="flex h-10 items-center gap-4 rounded-lg px-3 text-sm hover:bg-accent"
-          >
-            <ChannelAvatar channel={channel} className="size-6 text-[10px]" />
-            <span className="truncate">{channel.name}</span>
-          </Link>
-        )
-      })}
+      {subscriptions.map((channel) => (
+        <Link
+          key={channel.id}
+          href="/subscriptions"
+          onClick={onNavigate}
+          className="flex h-10 items-center gap-4 rounded-lg px-3 text-sm hover:bg-accent"
+        >
+          <ChannelAvatar channel={channel} className="size-6 text-[10px]" />
+          <span className="truncate">{channel.name}</span>
+        </Link>
+      ))}
 
       <hr className="my-3 border-border" />
       <h2 className="px-3 pb-1 text-base font-semibold">Explore</h2>
@@ -123,10 +120,6 @@ function FullNav({ onNavigate }: { onNavigate?: () => void }) {
         />
       ))}
 
-      <hr className="my-3 border-border" />
-      <p className="px-3 pb-4 text-xs leading-relaxed text-muted-foreground">
-        {'StreamTube demo · Built with Next.js'}
-      </p>
     </nav>
   )
 }

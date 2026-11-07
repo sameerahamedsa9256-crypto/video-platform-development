@@ -10,8 +10,7 @@ const geist = Geist({ subsets: ['latin'], variable: '--font-geist' })
 
 export const metadata: Metadata = {
   title: 'StreamTube — Watch, share and discover videos',
-  description: 'A YouTube-style video platform with a home feed, Shorts, subscriptions, search, and a full video player.',
-  generator: 'v0.app',
+  description: 'Browse, search, and watch videos on StreamTube.',
   icons: {
     icon: [
       {
